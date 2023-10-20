@@ -1,2 +1,2 @@
 # Estore2
-Python Machine Test 1st round from Noviindus Technologies
+Python Machine Test 2nd round from Noviindus Technologies
