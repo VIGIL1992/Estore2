@@ -6,6 +6,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.decorators import login_required
 from .models import Course
 from django.shortcuts import get_object_or_404
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -20,7 +22,12 @@ def user_profile(request):
 
 def short_course_view(request):
     courses = Course.objects.all( )
-    return render(request, 'short_course_view.html',{'courses':courses})
+    
+    paginator = Paginator(courses, 2)
+    page = request.GET.get("page")
+    paged_course = paginator.get_page(page)
+    return render(request, 'short_course_view.html',{"courses": paged_course})
+    # return render(request, 'short_course_view.html',{'courses':courses , "page_obj": page_obj})
 
 
 def short_course_create(request):
@@ -101,12 +108,19 @@ def search_courses(request):
     query = request.GET.get('q', '')
 
     # Perform the search query, e.g., using the filter() method
-    courses = Course.objects.filter(title__icontains=query)
+    results = Course.objects.filter(title__icontains=query)
+    
+    # Create a list of dictionaries for the search results
+    search_results = []
+    for course in results:
+        search_results.append({
+            'title': course.title,
+            'subtitle': course.subtitle,
+            'description': course.description,
+        })
 
-    # Serialize the search results into JSON
-    results = [{'title': course.title, 'subtitle': course.subtitle, 'description': course.description} for course in courses]
-
-    return JsonResponse({'results': results})
+    # Return the search results as JSON
+    return JsonResponse({'results': search_results})
 
 
 

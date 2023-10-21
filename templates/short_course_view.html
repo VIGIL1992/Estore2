@@ -17,6 +17,13 @@
             </div>
             <!-- PAGE-HEADER END -->
 
+            <!--Search-->
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control" placeholder="Search for courses">
+            </div>
+            
+            <div id="search-results">hi</div>
+            <!--Search End-->
 
             <div class="row">
                 <div class="col-xl-12">
@@ -25,15 +32,9 @@
                             <h3 class="card-title">Short Term Course Table</h3>
                         </div>
                         <div class="card-body">
-                            <!--Search-->
-                            <div class="input-group">
-                                <input type="text" id="search-input" class="form-control" placeholder="Search for courses">
-                            </div>
                             
-                            <div id="search-results">hi</div>
-                            <!--Search End-->
                             
-                            <div id="search-results"></div>
+                            
 
                             <div class="table-responsive">
                                 <div class="table-responsive">
@@ -53,10 +54,12 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody  id="pagination-container">
+                                        <tbody  id="courses-list">
+                                        
                                             <!-- TABLE DETAILS -->
                                             {% for course in courses %}
-                                            <tr>
+                                            <tr id="items-list">
+                                            {% comment %} <tr> {% endcomment %}
                                                 <td> {{ course }}</td>
                                                 <td>
                                                     <img class="d-block img-fluid br-5 img-td"
@@ -123,18 +126,31 @@
                                 </div>
                                 <div class="card-body">
 
+                                    <!-- pagination-wrapper -->
+                                    {% if courses.has_other_pages %}
                                     <ul class="pagination">
+                                        {% if page_obj.has_previous %}
                                         <li class="page-item page-prev">
                                             <a class="page-link" href="" tabindex="-1">Prev</a>
                                         </li>
-                                        <li class="page-item active"><a class="page-link" href="">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="">4</a></li>
+                                        {% endif %}
+                                        {% comment %} {% for i in courses.paginator.page_rage %}
+                                            {% if courses.number == i %}
+                                            <li class="page-item active"><a class="page-link" href="">{{i}}</a></li>
+                                            {% else %}
+                                            <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                            {% endif %}
+                                        
+                                        {% endfor %} {% endcomment %}
+                                        <li class="page-item active"><a class="page-link" href="?page=1">1.</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page=2">2.</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page=">3.</a></li>
+                                        <li class="page-item"><a class="page-link" href="?page=4">4.</a></li>
                                         <li class="page-item page-next">
-                                            <a class="page-link" href="">Next</a>
+                                            <a class="page-link" href="#">Next</a>
                                         </li>
                                     </ul>
+                                    {% endif %}
                                     <!-- pagination-wrapper -->
                                 </div>
                             </div>
@@ -224,22 +240,20 @@
 
     {% endblock  %}
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!--Search-->
 
     <script>
-        
-
-
         $(document).ready(function() {
             $('#search-input').on('input', function() {
                 var query = $(this).val();
-        
                 $.ajax({
                     url: '{% url "search_courses" %}',
                     data: {q: query},
                     success: function(data) {
                         var results = data.results;
                         var resultsHtml = '';
-        
                         for (var i = 0; i < results.length; i++) {
                             resultsHtml += '<div>';
                             resultsHtml += '<h3>' + results[i].title + '</h3>';
@@ -247,45 +261,14 @@
                             resultsHtml += '<p>' + results[i].description + '</p>';
                             resultsHtml += '</div>';
                         }
-        
                         $('#search-results').html(resultsHtml);
                     }
                 });
             });
         });
-        </script>
+    </script>
+<!--Search End-->
+    
 
-        <!--pagination-->
-        <script>
-            $(document).ready(function () {
-                var itemsPerPage = 2; // Number of items per page
-                var $items = $("#items-list li");
-                var itemCount = $items.length;
-                var pageCount = Math.ceil(itemCount / itemsPerPage);
-                var currentPage = 1;
-    
-                function showPage(page) {
-                    $items.hide().slice((page - 1) * itemsPerPage, page * itemsPerPage).show();
-                    $("#current-page").text(page);
-                }
-    
-                showPage(currentPage);
-    
-                $("#prev-page").click(function () {
-                    if (currentPage > 1) {
-                        currentPage--;
-                        showPage(currentPage);
-                    }
-                });
-    
-                $("#next-page").click(function () {
-                    if (currentPage < pageCount) {
-                        currentPage++;
-                        showPage(currentPage);
-                    }
-                });
-            });
-        </script>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         

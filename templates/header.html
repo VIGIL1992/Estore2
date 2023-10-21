@@ -1,4 +1,4 @@
-
+{% load static %}
 
     <!-- PAGE -->
     <div class="page">
@@ -11,10 +11,10 @@
                         <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar"
                             href="javascript:void(0)"></a>
                         <!-- sidebar-toggle-->
-                        <a class="logo-horizontal " href="index.php">
-                            {% comment %} <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img desktop-logo" alt="logo">
-                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img light-logo1" alt="logo"> {% endcomment %}
-                            <img src="assets/images_ex/logo.png" class="header-brand-img light-logo1" alt="logo">
+                        <a class="logo-horizontal " href="{% url "home" %}">
+                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img desktop-logo" alt="logo">
+                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img light-logo1" alt="logo">
+                            {% comment %} <img src="assets/images_ex/logo.png" class="header-brand-img light-logo1" alt="logo"> {% endcomment %}
                         </a>
 
                         <div class="d-flex order-lg-2 ms-auto header-right-icons">
@@ -42,7 +42,7 @@
                                         <div class="dropdown d-flex profile-1">
                                             <a href="javascript:void(0)" data-bs-toggle="dropdown"
                                                 class=" leading-none d-flex">
-                                                <img src="assets/images_ex/user.png" alt="profile-user"
+                                                <img src="{% static "assets/images_ex/user.png" %}" alt="profile-user"
                                                     class="avatar  profile-user brround cover-image">
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -83,15 +83,12 @@
                 <div class="app-sidebar">
                     <div class="side-header">
                         <!-- LOGO start -->
-                        <a class="header-brand1" href="index.php">
-                            {% comment %} <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img desktop-logo" alt="logo">
+                        <a class="header-brand1" href="{% url "home" %}">
+                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img desktop-logo" alt="logo">
                             <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img toggle-logo" alt="logo">
                             <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img light-logo" alt="logo">
-                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img light-logo1" alt="logo"> {% endcomment %}
-                            <img src="assets/images_ex/logo.png" class="header-brand-img desktop-logo" alt="logo">
-                            <img src="assets/images_ex/logo.png" class="header-brand-img toggle-logo" alt="logo">
-                            <img src="assets/images_ex/logo.png" class="header-brand-img light-logo" alt="logo">
-                            <img src="assets/images_ex/logo.png" class="header-brand-img light-logo1" alt="logo">
+                            <img src="{% static "assets/images_ex/logo.png" %}" class="header-brand-img light-logo1" alt="logo">
+                        
                         </a>
                         <!-- LOGO  end-->
                     </div>
