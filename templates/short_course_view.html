@@ -22,7 +22,7 @@
                 <input type="text" id="search-input" class="form-control" placeholder="Search for courses">
             </div>
             
-            <div id="search-results">hi</div>
+            <div id="search-results"></div>
             <!--Search End-->
 
             <div class="row">
@@ -57,7 +57,7 @@
                                         <tbody  id="courses-list">
                                         
                                             <!-- TABLE DETAILS -->
-                                            {% for course in courses %}
+                                            {% for course in paged_course %}
                                             <tr id="items-list">
                                             {% comment %} <tr> {% endcomment %}
                                                 <td> {{ course }}</td>
@@ -127,13 +127,13 @@
                                 <div class="card-body">
 
                                     <!-- pagination-wrapper -->
-                                    {% if courses.has_other_pages %}
+                                    {% if paged_course.has_other_pages %}
                                     <ul class="pagination">
-                                        {% if page_obj.has_previous %}
+                                        {% comment %} {% if page_obj.has_previous %}
                                         <li class="page-item page-prev">
                                             <a class="page-link" href="" tabindex="-1">Prev</a>
                                         </li>
-                                        {% endif %}
+                                        {% endif %} {% endcomment %}
                                         {% comment %} {% for i in courses.paginator.page_rage %}
                                             {% if courses.number == i %}
                                             <li class="page-item active"><a class="page-link" href="">{{i}}</a></li>
@@ -189,6 +189,7 @@
             </div>
         </div>
     </div>
+    <!-- MESSAGE MODAL End-->
 
     <!-- Course Detail  MODAL -->
     <div class="modal  fade" id="crsdetail" tabindex="-1" role="dialog">
@@ -236,9 +237,7 @@
             </div>
         </div>
     </div>
-
-
-    {% endblock  %}
+    <!-- Course Detail  MODAL End-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
@@ -269,6 +268,11 @@
     </script>
 <!--Search End-->
     
+
+
+{% endblock  %}
+
+   
 
 
         

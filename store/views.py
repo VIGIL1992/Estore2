@@ -8,6 +8,7 @@ from .models import Course
 from django.shortcuts import get_object_or_404
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.http import JsonResponse
+from django.contrib import messages
 
 
 # Create your views here.
@@ -26,7 +27,11 @@ def short_course_view(request):
     paginator = Paginator(courses, 2)
     page = request.GET.get("page")
     paged_course = paginator.get_page(page)
-    return render(request, 'short_course_view.html',{"courses": paged_course})
+    context = {
+        "paged_course": paged_course,
+        "courses" :  courses
+    }
+    return render(request, 'short_course_view.html', context)
     # return render(request, 'short_course_view.html',{'courses':courses , "page_obj": page_obj})
 
 
@@ -105,10 +110,10 @@ def course_edit(request, course_id):
 from django.http import JsonResponse
 
 def search_courses(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('q')
 
     # Perform the search query, e.g., using the filter() method
-    results = Course.objects.filter(title__icontains=query)
+    results = Course.objects.filter(title__icontains = query)
     
     # Create a list of dictionaries for the search results
     search_results = []
@@ -127,48 +132,27 @@ def search_courses(request):
 
 #################
 def login_user(request):
-	if request.method == "POST":
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(request, username=username, password=password)
-		if user is not None:
-			login(request, user)
-			# messages.success(request, ("You Have Been Logged In!"))
-			return redirect('home')
-		else:
-			# messages.success(request, ("There was an error, please try again..."))
-			return redirect('login')
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return redirect('login_user')
 
-	else:
-		return render(request, 'login_user.html', {})
-    
+    else:
+        return render(request, 'login_user.html', {})
 
+@login_required
 def logout_user(request):
     logout(request)
-    # messages.success(request, ("you have been logged out"))
     return redirect('home')
-    
-# @login_required
-# def resetPassword(request):
-#     if request.method == "POST":
-#         password = request.POST['new_password']
-#         confirm_password = request.POST['confirm_password']
-        
-#         if password == confirm_password:
-#             uid = request.session.get('uid')
-#             user = User.objects.get(pk=uid)
-#             user.set_password(password)
-#             user.save()
-#             # messages.success(request, 'Password reset sucessfully')
-#             return redirect('home')
-#         else:
-#             # messages.error(request, 'Password is does not match!')
-#             return redirect('resetPassword')
-                                    
-#     else:
-#         return render(request, 'index.html')
-    
-    
+
+
+
+ 
 @login_required
 def resetPassword(request):
     if request.method == "POST":
